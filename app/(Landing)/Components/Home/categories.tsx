@@ -1,35 +1,15 @@
+import { Category } from "@/app/types";
 import { FiArrowRight } from "react-icons/fi";
 import Link from "next/link";
 import Image from "next/image";
+import { getImageUrl } from "@/app/lib/api";
 
 
-const categoryList = [
-    {
-        name: "Running",
-        imgUrl: "Group-6.png",
-    },
-    {
-        name: "Tennis",
-        imgUrl: "Group-7.png",
-    },
-    {
-        name: "BasketBall",
-        imgUrl: "Group-8.png",
-    },
-    {
-        name: "Football",
-        imgUrl: "Group-9.png",
-    },
-    {
-        name: "Badminton",
-        imgUrl: "Group-10.png",
-    },
-    {
-        name: "Swimming",
-        imgUrl: "Group-11.png",
-    },
-]
-const CategoriesSection = () => 
+type TCategoriesProps = {
+    categories: Category[];
+}
+
+const CategoriesSection = ({ categories }: TCategoriesProps) => 
     {
         return <section id="category-section" className="container mx-auto">
             <div className="flex justify-between">
@@ -40,16 +20,16 @@ const CategoriesSection = () =>
         </Link>
     </div>
         <div className="grid grid-cols-6 gap-12 mt-8 pb-10">
-        {categoryList.map((category, index) => (
+        {categories.map((category) => (
             <div
-            key={index}
+            key={category._id}
             className="w-full aspect-square rounded-lg bg-gradient-to-r from-[#f1f1f1] to-[#f7f7f7] flex items-center justify-center"
         >
         <div className="self-center">
             <Image
-        src={`/image/categories/${category.imgUrl}`}
-        width={100}
-        height={100}
+        src={getImageUrl(category.imageUrl)}
+        width={90}
+        height= "90"
         alt={category.name}
         className="mb-[10px]"
         />
