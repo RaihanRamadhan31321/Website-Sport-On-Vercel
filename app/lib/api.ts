@@ -1,30 +1,35 @@
-import { error } from "console";
-
 export async function fetchAPI<T>(
-    endpoint: string,
-    options?: RequestInit
+  endpoint: string,
+  options?: RequestInit,
 ): Promise<T> {
-    const res = await  fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
-        ...options,
-        cache: options?.cache || "no-store", //data no-store dijalankan secara real-time
-    })
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+    ...options,
+    cache: options?.cache || "no-store", // kita set no-store karena kita ingin mendapat data lebih real time atau lebih updated
+  });
 
-    if (!res.ok) {
-        let errorMessege = 'Failed to fetch data from ${endpoint}';
-        try{
-            const errorData = await res.json();
-            errorMessege = errorData.messege || errorData.error || errorMessege;
-        } catch (e) {
-            console.log(e);
-        }
-
-        throw new Error(errorMessege);
+  if (!res.ok) {
+    let errorMessage = `Failed to fetch data from ${endpoint}`;
+    try {
+      const errorData = await res.json();
+      errorMessage = errorData.message || errorData.error || errorMessage;
+    } catch (e) {
+      console.log(e);
     }
 
-    return res.json();
+    throw new Error(errorMessage);
+  }
+
+  return res.json();
 }
 
 export function getImageUrl(path: string) {
-    if (path.startsWith("http")) return path;
-    return `${process.env.NEXT_PUBLIC_API_ROOT}/${path}`;
+  if (path.startsWith("http")) return path; // artinya url nya sudah valid
+  return `${process.env.NEXT_PUBLIC_API_ROOT}/${path}`;
+}
+
+export function getAuthHeaders() {
+  const token = localStorage.getItem("token");
+  return {
+    Authorization: `Bearer ${token}`,
+  };
 }
